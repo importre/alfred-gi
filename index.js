@@ -1,8 +1,6 @@
 const alfy = require('alfy');
 const got = require('got');
 const input = alfy.input.toLowerCase();
-
-const treeUrl = 'https://api.github.com/repos/github/gitignore/git/trees/master?recursive=1';
 const fileUrl = 'https://github.com/github/gitignore/blob/master/';
 
 function comp(a, b) {
@@ -20,7 +18,7 @@ function comp(a, b) {
   return a.localeCompare(b);
 }
 
-function parseTree(tree) {
+function filter(tree) {
   return tree
     .filter(x => {
       filename = x.path.replace(/Global\//, '')
@@ -40,24 +38,23 @@ function parseTree(tree) {
 const items = alfy.cache.get('items');
 const now = alfy.config.get('now') || Date.now();
 const gap = Date.now() - now;
-const tolerance = 1000 * 3600 * 24;
+const tolerance = 1000 * 60;
 
 if (items && gap < tolerance) {
-  const output = parseTree(items);
+  const output = filter(items);
   alfy.output(output);
 } else {
-  got(treeUrl, {
-      json: true
-    })
-    .then(result => {
-      const items = result.body.tree;
+  const url = 'https://alfred-workflows-62254.firebaseio.com/gi.json'
+  got(url)
+    .then(response => {
+      const items = JSON.parse(response.body);
       alfy.cache.set('items', items);
-      alfy.config.set('now', Date.now());
-      const output = parseTree(items);
+      const output = filter(items);
       alfy.output(output);
+      alfy.config.set('now', Date.now());
     })
     .catch(error => {
-      alfy.error(error.message)
+      alfy.log(error);
     });
 }
 
