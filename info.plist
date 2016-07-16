@@ -65,7 +65,7 @@
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
-				<true/>
+				<false/>
 				<key>queuedelaymode</key>
 				<integer>2</integer>
 				<key>queuemode</key>
@@ -115,7 +115,7 @@
 		</dict>
 	</dict>
 	<key>version</key>
-	<string>0.2.0</string>
+	<string>0.2.1</string>
 	<key>webaddress</key>
 	<string></string>
 </dict>
