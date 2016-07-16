@@ -21,7 +21,9 @@ function filter(tree) {
 }
 
 const url = 'https://alfred-workflows-62254.firebaseio.com/gi.json'
-alfy.fetch(url)
+alfy.fetch(url, {
+    maxAge: 86400000, // 24 hours
+  })
   .then(items => {
     const output = filter(items);
     alfy.output(output);
